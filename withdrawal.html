@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grand Chase Bank - Dashboard</title>
+    <style>
+        :root {
+            --navy-dark: #0A192F;
+            --navy-card: #112240;
+            --gold-primary: #D4AF37;
+            --gold-hover: #B89528;
+            --bg-page: #F8FAFC;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --white: #FFFFFF;
+            --border-color: #CBD5E1;
+            --green: #10B981;
+            --red: #EF4444;
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Navigation */
+        header {
+            background-color: var(--navy-dark);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gold-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--gold-primary);
+            color: var(--navy-dark);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Main Container Layout */
+        .container {
+            max-width: 1080px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Tab Controls */
+        .tab-bar {
+            display: flex;
+            background: #E2E8F0;
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            gap: 4px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.6rem 0;
+            border: none;
+            background: transparent;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .tab-btn.active {
+            background: var(--white);
+            color: var(--navy-dark);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Forms */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--navy-dark);
+        }
+
+        /* Chips / Amount Buttons */
+        .chips {
+            display: flex;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .chip-btn {
+            background: #F1F5F9;
+            border: 1px solid var(--border-color);
+            padding: 0.3rem 0.6rem;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .chip-btn:hover {
+            background: #E2E8F0;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 0.85rem;
+            background-color: var(--navy-dark);
+            color: var(--white);
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--navy-card);
+        }
+
+        /* Right Sidebar Balance Card */
+        .balance-widget {
+            background: linear-gradient(135deg, var(--navy-dark), var(--navy-card));
+            color: var(--white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .balance-title {
+            font-size: 0.8rem;
+            color: var(--gold-primary);
+            text-transform: uppercase;
+        }
+
+        .balance-amount {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0.4rem 0 1rem 0;
+        }
+
+        .history-list {
+            list-style: none;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.65rem 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .val-plus { color: var(--green); font-weight: 600; }
+        .val-minus { color: var(--red); font-weight: 600; }
+
+        .qr-box {
+            text-align: center;
+            padding: 1.5rem;
+            background: #F1F5F9;
+            border-radius: 8px;
+            border: 2px dashed var(--border-color);
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">Grand Chase Bank</div>
+        <div class="user-info">
+            <div class="avatar">JD</div>
+            <span>John Doe</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Main Form Left Side -->
+        <div class="card">
+            <!-- Tabs -->
+            <div class="tab-bar">
+                <button type="button" class="tab-btn active" data-target="send-sec">Send</button>
+                <button type="button" class="tab-btn" data-target="receive-sec">Receive</button>
+                <button type="button" class="tab-btn" data-target="deposit-sec">Deposit</button>
+                <button type="button" class="tab-btn" data-target="withdraw-sec">Withdraw</button>
+            </div>
+
+            <!-- 1. SEND SECTION -->
+            <div id="send-sec" class="tab-content active">
+                <form id="form-send">
+                    <div class="form-group">
+                        <label for="send-recipient">Recipient Email or Account</label>
+                        <input type="text" id="send-recipient" class="form-control" placeholder="user@domain.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="send-amount">Amount ($)</label>
+                        <input type="number" id="send-amount" class="form-control" placeholder="0.00" min="1" step="0.01" required>
+                        <div class="chips">
+                            <button type="button" class="chip-btn" data-input="send-amount" data-add="25">+$25</button>
+                            <button type="button" class="chip-btn" data-input="send-amount" data-add="50">+$50</button>
+                            <button type="button" class="chip-btn" data-input="send-amount" data-add="100">+$100</button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit">Send Money</button>
+                </form>
+            </div>
+
+            <!-- 2. RECEIVE SECTION -->
+            <div id="receive-sec" class="tab-content">
+                <div class="qr-box">
+                    <div style="font-size: 2.5rem;">📱</div>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Scan code or copy details below</p>
+                </div>
+                <div class="form-group">
+                    <label>Account Number</label>
+                    <input type="text" class="form-control" value="8839-0019-1042" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Pay Link</label>
+                    <input type="text" class="form-control" value="https://grandchase.com/pay/@johndoe" readonly>
+                </div>
+            </div>
+
+            <!-- 3. DEPOSIT SECTION -->
+            <div id="deposit-sec" class="tab-content">
+                <form id="form-deposit">
+                    <div class="form-group">
+                        <label for="deposit-method">Deposit Type</label>
+                        <select id="deposit-method" class="form-control">
+                            <option value="check">Mobile Check Deposit</option>
+                            <option value="ach">Linked Bank Account</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="file-field">
+                        <label for="check-file">Upload Check Front & Back</label>
+                        <input type="file" id="check-file" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="deposit-amount">Amount ($)</label>
+                        <input type="number" id="deposit-amount" class="form-control" placeholder="0.00" min="1" step="0.01" required>
+                        <div class="chips">
+                            <button type="button" class="chip-btn" data-input="deposit-amount" data-add="100">+$100</button>
+                            <button type="button" class="chip-btn" data-input="deposit-amount" data-add="500">+$500</button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit">Submit Deposit</button>
+                </form>
+            </div>
+
+            <!-- 4. WITHDRAW SECTION -->
+            <div id="withdraw-sec" class="tab-content">
+                <form id="form-withdraw">
+                    <div class="form-group">
+                        <label for="withdraw-dest">Destination</label>
+                        <select id="withdraw-dest" class="form-control">
+                            <option>Chase Checking (•••• 4412)</option>
+                            <option>Bank of America (•••• 8820)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="withdraw-amount">Amount ($)</label>
+                        <input type="number" id="withdraw-amount" class="form-control" placeholder="0.00" min="1" step="0.01" required>
+                        <div class="chips">
+                            <button type="button" class="chip-btn" data-input="withdraw-amount" data-add="50">+$50</button>
+                            <button type="button" class="chip-btn" data-input="withdraw-amount" data-add="200">+$200</button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit">Withdraw Funds</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Side Widgets -->
+        <div>
+            <div class="balance-widget">
+                <div class="balance-title">Available Balance</div>
+                <div class="balance-amount">$24,850.00</div>
+                <div style="font-size: 0.85rem; opacity: 0.8;">Checking Account •••• 1042</div>
+            </div>
+
+            <div class="card">
+                <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem;">Recent Transactions</h3>
+                <ul class="history-list">
+                    <li class="history-item">
+                        <div>
+                            <div>Check Deposit</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Today</div>
+                        </div>
+                        <span class="val-plus">+$1,250.00</span>
+                    </li>
+                    <li class="history-item">
+                        <div>
+                            <div>Transfer Sent</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Yesterday</div>
+                        </div>
+                        <span class="val-minus">-$450.00</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Isolated, Event-Driven JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // 1. Safe Tab Switching Logic
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+
+                    this.classList.add('active');
+                    const targetContent = document.getElementById(targetId);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                });
+            });
+
+            // 2. Safe Amount Add (Chips) Logic
+            const chipBtns = document.querySelectorAll('.chip-btn');
+            chipBtns.forEach(function(chip) {
+                chip.addEventListener('click', function() {
+                    const inputId = this.getAttribute('data-input');
+                    const addValue = parseFloat(this.getAttribute('data-add'));
+                    const targetInput = document.getElementById(inputId);
+
+                    if (targetInput) {
+                        let currentValue = parseFloat(targetInput.value) || 0;
+                        targetInput.value = (currentValue + addValue).toFixed(2);
+                    }
+                });
+            });
+
+            // 3. Conditional Upload Field Logic
+            const depositMethodSelect = document.getElementById('deposit-method');
+            const fileField = document.getElementById('file-field');
+
+            if (depositMethodSelect && fileField) {
+                depositMethodSelect.addEventListener('change', function() {
+                    if (this.value === 'check') {
+                        fileField.style.display = 'block';
+                    } else {
+                        fileField.style.display = 'none';
+                    }
+                });
+            }
+
+            // 4. Form Submit Handlers
+            const forms = document.querySelectorAll('form');
+            forms.forEach(function(form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Transaction request submitted successfully!');
+                    this.reset();
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>

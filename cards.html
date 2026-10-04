@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grand Chase Bank - Cards Management</title>
+    <style>
+        :root {
+            --navy-dark: #0A192F;
+            --navy-card: #112240;
+            --gold-primary: #D4AF37;
+            --gold-hover: #B89528;
+            --bg-page: #F8FAFC;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --white: #FFFFFF;
+            --border-color: #CBD5E1;
+            --green: #10B981;
+            --red: #EF4444;
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Header */
+        header {
+            background-color: var(--navy-dark);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gold-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--gold-primary);
+            color: var(--navy-dark);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Container Layout */
+        .container {
+            max-width: 1080px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 820px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card-panel {
+            background: var(--white);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--navy-dark);
+        }
+
+        /* Card Selector Pills */
+        .card-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1.25rem;
+        }
+
+        .select-pill {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            background: #F1F5F9;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .select-pill.active {
+            background: var(--navy-dark);
+            color: var(--gold-primary);
+            border-color: var(--navy-dark);
+        }
+
+        /* Visual Card Graphic Rendering */
+        .visual-card {
+            width: 100%;
+            height: 210px;
+            border-radius: 16px;
+            padding: 1.5rem;
+            color: white;
+            position: relative;
+            box-shadow: 0 10px 20px -5px rgba(10, 25, 47, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Card Themes */
+        .theme-physical {
+            background: linear-gradient(135deg, #0A192F 0%, #1E3A8A 100%);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+        }
+
+        .theme-virtual {
+            background: linear-gradient(135deg, #111827 0%, #374151 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .theme-disposable {
+            background: linear-gradient(135deg, #4C1D95 0%, #7C3AED 100%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-chip {
+            width: 42px;
+            height: 30px;
+            background: linear-gradient(135deg, #FFE082, #FFB300);
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .card-type-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+        }
+
+        .card-number {
+            font-family: "Courier New", Courier, monospace;
+            font-size: 1.25rem;
+            letter-spacing: 2px;
+            margin: 0.5rem 0;
+            word-spacing: 4px;
+        }
+
+        .card-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .card-holder {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+
+        .card-exp {
+            font-size: 0.85rem;
+            font-family: monospace;
+        }
+
+        /* Card Controls & Actions */
+        .action-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 1.25rem;
+        }
+
+        .btn-action {
+            padding: 0.65rem;
+            border: 1px solid var(--border-color);
+            background: #F8FAFC;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-action:hover {
+            background: #E2E8F0;
+        }
+
+        /* Settings Toggle Controls */
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.85rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .setting-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .setting-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Switch Toggle */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #CBD5E1;
+            transition: .3s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--green);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Create Virtual Card Section */
+        .create-btn {
+            width: 100%;
+            padding: 0.85rem;
+            background: var(--navy-dark);
+            color: var(--gold-primary);
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .create-btn:hover {
+            background: var(--navy-card);
+        }
+
+        .limit-slider-box {
+            margin-top: 0.5rem;
+        }
+
+        .slider-range {
+            width: 100%;
+            margin-top: 0.4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">Grand Chase Bank</div>
+        <div class="user-info">
+            <div class="avatar">JD</div>
+            <span>John Doe</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Left Side: Card View & Direct Actions -->
+        <div class="card-panel">
+            <div class="panel-header">
+                <span class="panel-title">My Cards</span>
+                <span id="status-badge" style="font-size: 0.75rem; font-weight: 700; color: var(--green); background: #D1FAE5; padding: 2px 8px; border-radius: 10px;">ACTIVE</span>
+            </div>
+
+            <!-- Selector Pills -->
+            <div class="card-selector">
+                <div class="select-pill active" id="pill-physical">Physical Metal</div>
+                <div class="select-pill" id="pill-virtual">Virtual Shopping</div>
+                <div class="select-pill" id="pill-disposable">Disposable</div>
+            </div>
+
+            <!-- Graphic Rendering -->
+            <div class="visual-card theme-physical" id="visual-card-element">
+                <div class="card-top">
+                    <div class="card-chip"></div>
+                    <span class="card-type-badge" id="card-type-label">PREMIER METAL</span>
+                </div>
+                <div>
+                    <div class="card-number" id="card-num-display">•••• •••• •••• 4012</div>
+                </div>
+                <div class="card-bottom">
+                    <div>
+                        <div class="card-holder">Cardholder</div>
+                        <div style="font-size: 0.9rem; font-weight: 600;" id="card-holder-display">JOHN DOE</div>
+                    </div>
+                    <div>
+                        <div class="card-holder">Expires / CVV</div>
+                        <div class="card-exp" id="card-exp-display">10/28 • •••</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Direct Action Controls -->
+            <div class="action-row">
+                <button type="button" class="btn-action" id="toggle-details-btn">
+                    <span>👁️</span> <span id="details-btn-text">Show Details</span>
+                </button>
+                <button type="button" class="btn-action" id="copy-card-btn">
+                    <span>📋</span> Copy Card #
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Side: Security Settings & Controls -->
+        <div class="card-panel">
+            <div class="panel-header">
+                <span class="panel-title">Security & Controls</span>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <span class="setting-name">Freeze Card</span>
+                    <span class="setting-desc">Block all incoming authorizations</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="freeze-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <span class="setting-name">Online Purchases</span>
+                    <span class="setting-desc">Allow internet transactions</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="online-toggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <span class="setting-name">ATM Withdrawals</span>
+                    <span class="setting-desc">Allow cash payouts at machines</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="atm-toggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                <div class="setting-info">
+                    <span class="setting-name">Monthly Limit ($)</span>
+                    <span class="setting-desc" id="limit-value-display">Current: $5,000 / month</span>
+                </div>
+                <div class="limit-slider-box">
+                    <input type="range" class="slider-range" id="limit-slider" min="500" max="10000" step="500" value="5000">
+                </div>
+            </div>
+
+            <button type="button" class="create-btn" id="generate-virtual-btn">+ Issue New Virtual Card</button>
+        </div>
+    </div>
+
+    <!-- JavaScript logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Mock Card Data Repository
+            const cardData = {
+                physical: {
+                    typeLabel: "PREMIER METAL",
+                    themeClass: "theme-physical",
+                    maskedNum: "•••• •••• •••• 4012",
+                    fullNum: "4532 8810 9921 4012",
+                    expCVV: "10/28 • 882",
+                    expCVVMasked: "10/28 • •••",
+                    frozen: false
+                },
+                virtual: {
+                    typeLabel: "ONLINE SHOPPING",
+                    themeClass: "theme-virtual",
+                    maskedNum: "•••• •••• •••• 8831",
+                    fullNum: "4111 2233 4455 8831",
+                    expCVV: "04/27 • 311",
+                    expCVVMasked: "04/27 • •••",
+                    frozen: false
+                },
+                disposable: {
+                    typeLabel: "SINGLE-USE BURNER",
+                    themeClass: "theme-disposable",
+                    maskedNum: "•••• •••• •••• 1092",
+                    fullNum: "4921 0042 1182 1092",
+                    expCVV: "11/26 • 009",
+                    expCVVMasked: "11/26 • •••",
+                    frozen: false
+                }
+            };
+
+            let currentActiveKey = 'physical';
+            let detailsVisible = false;
+
+            // DOM Elements
+            const pillPhysical = document.getElementById('pill-physical');
+            const pillVirtual = document.getElementById('pill-virtual');
+            const pillDisposable = document.getElementById('pill-disposable');
+
+            const visualCard = document.getElementById('visual-card-element');
+            const cardTypeLabel = document.getElementById('card-type-label');
+            const cardNumDisplay = document.getElementById('card-num-display');
+            const cardExpDisplay = document.getElementById('card-exp-display');
+
+            const toggleDetailsBtn = document.getElementById('toggle-details-btn');
+            const detailsBtnText = document.getElementById('details-btn-text');
+            const copyCardBtn = document.getElementById('copy-card-btn');
+
+            const freezeToggle = document.getElementById('freeze-toggle');
+            const statusBadge = document.getElementById('status-badge');
+            const limitSlider = document.getElementById('limit-slider');
+            const limitValueDisplay = document.getElementById('limit-value-display');
+            const generateVirtualBtn = document.getElementById('generate-virtual-btn');
+
+            // Render Card Data
+            function updateCardView() {
+                const card = cardData[currentActiveKey];
+
+                // Remove previous theme classes
+                visualCard.className = "visual-card " + card.themeClass;
+                cardTypeLabel.textContent = card.typeLabel;
+
+                if (detailsVisible) {
+                    cardNumDisplay.textContent = card.fullNum;
+                    cardExpDisplay.textContent = card.expCVV;
+                    detailsBtnText.textContent = "Hide Details";
+                } else {
+                    cardNumDisplay.textContent = card.maskedNum;
+                    cardExpDisplay.textContent = card.expCVVMasked;
+                    detailsBtnText.textContent = "Show Details";
+                }
+
+                // Update freeze switch state
+                freezeToggle.checked = card.frozen;
+                updateStatusBadge(card.frozen);
+            }
+
+            function updateStatusBadge(isFrozen) {
+                if (isFrozen) {
+                    statusBadge.textContent = "FROZEN";
+                    statusBadge.style.color = "var(--red)";
+                    statusBadge.style.background = "#FEE2E2";
+                } else {
+                    statusBadge.textContent = "ACTIVE";
+                    statusBadge.style.color = "var(--green)";
+                    statusBadge.style.background = "#D1FAE5";
+                }
+            }
+
+            // Tab Click Events
+            pillPhysical.addEventListener('click', function() {
+                setTabActive(this);
+                currentActiveKey = 'physical';
+                updateCardView();
+            });
+
+            pillVirtual.addEventListener('click', function() {
+                setTabActive(this);
+                currentActiveKey = 'virtual';
+                updateCardView();
+            });
+
+            pillDisposable.addEventListener('click', function() {
+                setTabActive(this);
+                currentActiveKey = 'disposable';
+                updateCardView();
+            });
+
+            function setTabActive(targetPill) {
+                [pillPhysical, pillVirtual, pillDisposable].forEach(p => p.classList.remove('active'));
+                targetPill.classList.add('active');
+            }
+
+            // Show/Hide Toggle
+            toggleDetailsBtn.addEventListener('click', function() {
+                detailsVisible = !detailsVisible;
+                updateCardView();
+            });
+
+            // Copy Card Number
+            copyCardBtn.addEventListener('click', function() {
+                const rawNum = cardData[currentActiveKey].fullNum.replace(/\s+/g, '');
+                navigator.clipboard.writeText(rawNum).then(function() {
+                    alert('Card number copied to clipboard!');
+                }).catch(function() {
+                    alert('Card Number: ' + rawNum);
+                });
+            });
+
+            // Freeze Toggle Handler
+            freezeToggle.addEventListener('change', function() {
+                cardData[currentActiveKey].frozen = this.checked;
+                updateStatusBadge(this.checked);
+            });
+
+            // Limit Slider Handler
+            limitSlider.addEventListener('input', function() {
+                limitValueDisplay.textContent = "Current: $" + parseInt(this.value).toLocaleString() + " / month";
+            });
+
+            // Generate New Card
+            generateVirtualBtn.addEventListener('click', function() {
+                alert('Grand Chase Bank: A new virtual card request has been submitted and is ready to use!');
+            });
+
+        });
+    </script>
+</body>
+</html>

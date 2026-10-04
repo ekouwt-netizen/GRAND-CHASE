@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chase Investments & Stock Trading</title>
+  <link rel="stylesheet" href="tyle.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <div class="logo-symbol"></div>
+        <span class="brand-title">CHASE <span class="sub-brand">Wealth Management</span></span>
+      </div>
+
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="nav-links" id="nav-links">
+        <a href="#" class="nav-link">Accounts</a>
+        <a href="#" class="nav-link active">Investments & Stocks</a>
+        <a href="#" class="nav-link">Pay & Transfer</a>
+        <a href="#" class="nav-link">Plan & Track</a>
+      </nav>
+
+      <div class="user-profile">
+        <div class="user-avatar">AM</div>
+        <span class="user-name">Alex Morgan</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="dashboard">
+    <div class="container">
+
+      <!-- Header Section -->
+      <section class="page-header">
+        <div>
+          <h1>Investment Overview</h1>
+          <p class="subtitle">Chase You Invest℠ Self-Directed Portfolio</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-secondary" id="deposit-btn">Transfer Funds</button>
+          <button class="btn btn-primary" id="open-trade-btn">Trade Stocks</button>
+        </div>
+      </section>
+
+      <!-- Portfolio Metrics -->
+      <section class="metrics-grid">
+        <div class="card metric-card">
+          <span class="metric-label">Total Portfolio Value</span>
+          <div class="metric-value">$184,250.60</div>
+          <div class="metric-delta positive">▲ +$2,140.20 (1.18%) Today</div>
+        </div>
+
+        <div class="card metric-card">
+          <span class="metric-label">Purchasing Power</span>
+          <div class="metric-value" id="cash-balance">$24,500.00</div>
+          <span class="metric-subtext">Settled Cash</span>
+        </div>
+
+        <div class="card metric-card">
+          <span class="metric-label">Unrealized Gain/Loss</span>
+          <div class="metric-value positive">+$31,820.40</div>
+          <div class="metric-delta positive">▲ +20.88% Total Return</div>
+        </div>
+
+        <div class="card metric-card">
+          <span class="metric-label">Estimated Annual Income</span>
+          <div class="metric-value">$4,120.00</div>
+          <span class="metric-subtext">2.23% Dividend Yield</span>
+        </div>
+      </section>
+
+      <!-- Main Layout -->
+      <div class="grid-content">
+        <!-- Watchlist -->
+        <section class="card main-section">
+          <div class="card-header flex-between">
+            <div>
+              <h2>Market Watchlist</h2>
+              <p class="section-subtext">Track stock quotes and performance in real time.</p>
+            </div>
+            <div class="search-box">
+              <input type="text" id="stock-search" placeholder="Search Ticker / Company...">
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Symbol</th>
+                  <th>Company</th>
+                  <th>Last Price</th>
+                  <th>Day Change</th>
+                  <th>Market Cap</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="watchlist-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Holdings & Allocation -->
+        <aside class="sidebar-section">
+          <div class="card">
+            <h2>Asset Allocation</h2>
+            <div class="allocation-container">
+              <div class="allocation-bar">
+                <div class="bar-segment us-stocks" style="width: 55%;" title="U.S. Stocks 55%"></div>
+                <div class="bar-segment int-stocks" style="width: 25%;" title="Int'l Stocks 25%"></div>
+                <div class="bar-segment cash" style="width: 20%;" title="Cash 20%"></div>
+              </div>
+              <ul class="allocation-legend">
+                <li><span class="dot us-stocks"></span> U.S. Equities <strong>55%</strong></li>
+                <li><span class="dot int-stocks"></span> International Equities <strong>25%</strong></li>
+                <li><span class="dot cash"></span> Cash & Equivalents <strong>20%</strong></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Top Holdings</h2>
+            <div class="holdings-list" id="holdings-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <!-- Trade Modal -->
+  <div class="modal-backdrop" id="trade-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Execute Stock Order</h3>
+        <button class="close-btn" id="close-modal-btn">&times;</button>
+      </div>
+
+      <form id="trade-form">
+        <div class="form-group">
+          <label for="stock-select">Select Asset</label>
+          <select id="stock-select">
+            <!-- Dynamically populated -->
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="order-action">Action</label>
+            <select id="order-action">
+              <option value="buy">Buy</option>
+              <option value="sell">Sell</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="order-shares">Quantity</label>
+            <input type="number" id="order-shares" min="1" value="1" required />
+          </div>
+        </div>
+
+        <div class="order-summary">
+          <div class="summary-item">
+            <span>Market Price</span>
+            <strong id="modal-price">$0.00</strong>
+          </div>
+          <div class="summary-item">
+            <span>Commission</span>
+            <strong class="positive">$0.00 (Chase Online Trade)</strong>
+          </div>
+          <div class="summary-item total">
+            <span>Estimated Total</span>
+            <strong id="modal-total">$0.00</strong>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary full-width">Place Order</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js">
+
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grand Chase Bank - Loans & Credit</title>
+    <style>
+        :root {
+            --navy-dark: #0A192F;
+            --navy-card: #112240;
+            --gold-primary: #D4AF37;
+            --gold-hover: #B89528;
+            --bg-page: #F8FAFC;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --white: #FFFFFF;
+            --border-color: #CBD5E1;
+            --green: #10B981;
+            --red: #EF4444;
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Header Navigation */
+        header {
+            background-color: var(--navy-dark);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gold-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--gold-primary);
+            color: var(--navy-dark);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Container Layout */
+        .container {
+            max-width: 1080px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 820px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card-panel {
+            background: var(--white);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--navy-dark);
+        }
+
+        /* Loan Summary Highlight Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-card {
+            background: var(--navy-dark);
+            color: var(--white);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--gold-primary);
+        }
+
+        .summary-label {
+            font-size: 0.75rem;
+            color: var(--gold-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            outline: none;
+            background: var(--white);
+        }
+
+        .form-control:focus {
+            border-color: var(--navy-dark);
+        }
+
+        /* Calculator Results Display Box */
+        .calc-result-box {
+            background: #F1F5F9;
+            border-radius: 8px;
+            padding: 1.25rem;
+            border: 1px solid var(--border-color);
+            margin-top: 1rem;
+        }
+
+        .calc-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .calc-row:last-child {
+            margin-bottom: 0;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .calc-row.highlight {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--navy-dark);
+        }
+
+        /* Primary Action Button */
+        .btn-submit {
+            width: 100%;
+            padding: 0.85rem;
+            background-color: var(--navy-dark);
+            color: var(--gold-primary);
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--navy-card);
+        }
+
+        /* Active Loans List */
+        .loan-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .loan-item:last-child {
+            border-bottom: none;
+        }
+
+        .loan-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .loan-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .loan-amount {
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        /* Progress Bar */
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background-color: #E2E8F0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.3rem;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: var(--green);
+            border-radius: 4px;
+        }
+
+        .progress-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Range Sliders */
+        .range-slider {
+            width: 100%;
+            margin-top: 0.4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">Grand Chase Bank</div>
+        <div class="user-info">
+            <div class="avatar">JD</div>
+            <span>John Doe</span>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- Left Side: Interactive Loan Calculator & Application -->
+        <div class="card-panel">
+            <div class="panel-header">
+                <span class="panel-title">Loan Calculator & Pre-Check</span>
+            </div>
+
+            <form id="loan-calc-form">
+                <div class="form-group">
+                    <label for="loan-type">Loan Type</label>
+                    <select id="loan-type" class="form-control">
+                        <option value="5.99">Personal Loan (5.99% APR)</option>
+                        <option value="4.25">Auto Loan (4.25% APR)</option>
+                        <option value="6.75">Home Mortgage (6.75% APR)</option>
+                        <option value="8.50">Business Credit Line (8.50% APR)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="loan-amount-range">Loan Amount: <strong id="amount-text">$15,000</strong></label>
+                    <input type="range" id="loan-amount-range" class="range-slider" min="1000" max="100000" step="1000" value="15000">
+                </div>
+
+                <div class="form-group">
+                    <label for="loan-term-range">Loan Term: <strong id="term-text">36 Months</strong></label>
+                    <input type="range" id="loan-term-range" class="range-slider" min="12" max="72" step="12" value="36">
+                </div>
+
+                <!-- Calculated Output Area -->
+                <div class="calc-result-box">
+                    <div class="calc-row">
+                        <span>Interest Rate:</span>
+                        <strong id="rate-display">5.99% APR</strong>
+                    </div>
+                    <div class="calc-row">
+                        <span>Total Estimated Interest:</span>
+                        <strong id="interest-display">$1,426.12</strong>
+                    </div>
+                    <div class="calc-row highlight">
+                        <span>Monthly Payment:</span>
+                        <strong id="monthly-display">$456.28 / mo</strong>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">Apply for Pre-Approval</button>
+            </form>
+        </div>
+
+        <!-- Right Side: Existing Loans & Credit Lines Overview -->
+        <div>
+            <!-- Summary Overview -->
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-label">Total Outstanding</div>
+                    <div class="summary-value">$18,450</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Available Credit</div>
+                    <div class="summary-value">$12,000</div>
+                </div>
+            </div>
+
+            <!-- Active Credit Accounts -->
+            <div class="card-panel">
+                <div class="panel-header">
+                    <span class="panel-title">Active Credit & Loans</span>
+                </div>
+
+                <div class="loan-item">
+                    <div class="loan-item-header">
+                        <span class="loan-name">Auto Loan (2024 Sedan)</span>
+                        <span class="loan-amount">$12,450 / $25,000</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: 50.2%;"></div>
+                    </div>
+                    <div class="progress-meta">
+                        <span>50% Paid Off</span>
+                        <span>$340.00 Due Oct 15</span>
+                    </div>
+                </div>
+
+                <div class="loan-item">
+                    <div class="loan-item-header">
+                        <span class="loan-name">Personal Flex Credit</span>
+                        <span class="loan-amount">$6,000 / $18,000</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: 66.6%;"></div>
+                    </div>
+                    <div class="progress-meta">
+                        <span>67% Credit Available</span>
+                        <span>$180.00 Due Oct 22</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // DOM Elements
+            const loanTypeSelect = document.getElementById('loan-type');
+            const amountRange = document.getElementById('loan-amount-range');
+            const termRange = document.getElementById('loan-term-range');
+
+            const amountText = document.getElementById('amount-text');
+            const termText = document.getElementById('term-text');
+
+            const rateDisplay = document.getElementById('rate-display');
+            const interestDisplay = document.getElementById('interest-display');
+            const monthlyDisplay = document.getElementById('monthly-display');
+
+            const calcForm = document.getElementById('loan-calc-form');
+
+            // Calculation Logic
+            function calculateLoan() {
+                const principal = parseFloat(amountRange.value);
+                const annualRate = parseFloat(loanTypeSelect.value);
+                const months = parseInt(termRange.value);
+
+                // Update UI Labels
+                amountText.textContent = '$' + principal.toLocaleString();
+                termText.textContent = months + ' Months';
+                rateDisplay.textContent = annualRate.toFixed(2) + '% APR';
+
+                // Amortization Monthly Payment Formula
+                const monthlyRate = (annualRate / 100) / 12;
+                let monthlyPayment = 0;
+                let totalInterest = 0;
+
+                if (monthlyRate > 0) {
+                    monthlyPayment = (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+                    const totalCost = monthlyPayment * months;
+                    totalInterest = totalCost - principal;
+                } else {
+                    monthlyPayment = principal / months;
+                }
+
+                // Render Results
+                monthlyDisplay.textContent = '$' + monthlyPayment.toFixed(2) + ' / mo';
+                interestDisplay.textContent = '$' + totalInterest.toFixed(2);
+            }
+
+            // Event Listeners
+            loanTypeSelect.addEventListener('change', calculateLoan);
+            amountRange.addEventListener('input', calculateLoan);
+            termRange.addEventListener('input', calculateLoan);
+
+            // Initial Execution
+            calculateLoan();
+
+            // Submit Handler
+            calcForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Grand Chase Bank: Your pre-approval application has been submitted for review!');
+            });
+
+        });
+    </script>
+</body>
+</html>

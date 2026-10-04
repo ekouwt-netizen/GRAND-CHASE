@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grand Chase Bank - 24/7 Customer Support</title>
+  <link rel="stylesheet" href="yle.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-logo">GC</div>
+        <span class="brand-name">Grand Chase <strong>Bank</strong></span>
+      </div>
+      <button class="mobile-toggle" id="menu-toggle" aria-label="Toggle Navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav-menu" id="nav-menu">
+        <a href="#" class="nav-link">Personal</a>
+        <a href="#" class="nav-link">Business</a>
+        <a href="#" class="nav-link">Investments</a>
+        <a href="#" class="nav-link active">Support 24/7</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="tel:+233597328895" class="btn btn-outline">Call Support</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-support">
+    <div class="container hero-content">
+      <span class="badge-status"><span class="status-dot"></span> 24/7 Live Support Active</span>
+      <h1>How can we help you today?</h1>
+      <p>We are always here for you. Reach out via live chat, email, or telephone day or night.</p>
+      
+      <div class="search-bar">
+        <input type="text" id="support-search" placeholder="Search topics, card loss, international transfers..." onkeyup="filterFaqs()">
+        <button class="btn btn-primary">Search</button>
+      </div>
+    </div>
+  </section>
+
+  <main class="container">
+
+    <!-- Direct Contact Cards -->
+    <section class="contact-grid">
+      <!-- Direct Call Card -->
+      <div class="card contact-card">
+        <div class="card-icon">📞</div>
+        <h3>Call Us 24/7</h3>
+        <p>Speak directly with our dedicated customer representative team anytime.</p>
+        <a href="tel:+233597328895" class="contact-detail">+233 59 732 8895</a>
+        <span class="subtext">Toll-free / International lines open</span>
+      </div>
+
+      <!-- Direct Email Card -->
+      <div class="card contact-card">
+        <div class="card-icon">✉️</div>
+        <h3>Email Support</h3>
+        <p>Send us an email inquiry and receive a response within 15 minutes.</p>
+        <a href="mailto:ekouwt@gmail.com" class="contact-detail">ekouwt@gmail.com</a>
+        <span class="subtext">Encrypted & Secure Channel</span>
+      </div>
+
+      <!-- Live Chat Card -->
+      <div class="card contact-card">
+        <div class="card-icon">💬</div>
+        <h3>Instant Live Chat</h3>
+        <p>Chat live with our AI assistant or connect immediately with a support human.</p>
+        <button class="btn btn-primary" onclick="toggleChatWidget()">Start Live Chat</button>
+        <span class="subtext">Average response time: &lt; 1 minute</span>
+      </div>
+    </section>
+
+    <!-- Support Form & Emergency Actions Section -->
+    <div class="support-layout">
+      
+      <!-- Ticket Submission Form -->
+      <section class="card form-section">
+        <h2>Submit a Support Request</h2>
+        <p class="section-desc">Fill in your information below and an agent will follow up right away.</p>
+        
+        <form id="support-form" onsubmit="handleFormSubmit(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fullname">Full Name</label>
+              <input type="text" id="fullname" value="Alex Morgan" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" value="ekouwt@gmail.com" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" value="+233597328895" required>
+            </div>
+            <div class="form-group">
+              <label for="category">Inquiry Category</label>
+              <select id="category" required>
+                <option value="general">General Account Service</option>
+                <option value="card">Lost / Stolen Card</option>
+                <option value="transfer">Wire Transfer & Payments</option>
+                <option value="investments">Investments & Stocks</option>
+                <option value="fraud">Fraud & Security</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="message">How can we assist you?</label>
+            <textarea id="message" rows="5" placeholder="Describe your issue or question..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Submit Ticket</button>
+        </form>
+      </section>
+
+      <!-- Side Emergency Action Panel -->
+      <aside class="sidebar-section">
+        <div class="card emergency-card">
+          <div class="alert-header">
+            <span class="alert-icon">⚠️</span>
+            <h3>Emergency Assistance</h3>
+          </div>
+          <p>Has your debit card been misplaced, stolen, or compromised?</p>
+          <button class="btn btn-danger full-width" onclick="triggerEmergencyLock()">Freeze Account & Cards</button>
+        </div>
+
+        <div class="card info-card">
+          <h3>Grand Chase Support Hub</h3>
+          <ul class="info-list">
+            <li><strong>Hotline:</strong> +233 59 732 8895</li>
+            <li><strong>Official Email:</strong> ekouwt@gmail.com</li>
+            <li><strong>Service Hours:</strong> 24 Hours / 7 Days a Week</li>
+            <li><strong>Encryption:</strong> 256-Bit SSL Secured</li>
+          </ul>
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- Frequently Asked Questions Accordion -->
+    <section class="card faq-section">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-accordion" id="faq-list">
+        
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>How do I report a lost or stolen payment card immediately?</span>
+            <span class="chevron">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>You can instantly freeze your card using the Emergency Freeze button on this page, inside your Grand Chase mobile app, or by calling our hotline at <strong>+233 59 732 8895</strong> immediately.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>What is the response time for support emails?</span>
+            <span class="chevron">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>All support messages sent to <strong>ekouwt@gmail.com</strong> are prioritized. Emergency and security requests are handled in under 15 minutes.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>Is 24/7 phone support free of charge?</span>
+            <span class="chevron">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes, Grand Chase Bank provides round-the-clock telephone assistance to all personal, business, and wealth account holders without extra fees.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Interactive Live Chat Floating Button & Widget -->
+  <div class="chat-widget-container" id="chat-widget">
+    <div class="chat-header">
+      <div class="chat-user">
+        <span class="status-dot"></span>
+        <div>
+          <strong>Grand Chase Support</strong>
+          <p>Online | Typical reply &lt; 1 min</p>
+        </div>
+      </div>
+      <button class="close-chat" onclick="toggleChatWidget()">&times;</button>
+    </div>
+    <div class="chat-body" id="chat-body">
+      <div class="chat-msg bot">
+        Hello Alex! Welcome to Grand Chase Support. How can we assist you today?
+      </div>
+    </div>
+    <div class="chat-footer">
+      <input type="text" id="chat-input" placeholder="Type message..." onkeydown="if(event.key==='Enter') sendChatMessage()">
+      <button onclick="sendChatMessage()">Send</button>
+    </div>
+  </div>
+
+  <button class="floating-chat-btn" onclick="toggleChatWidget()">
+    💬 Live Support
+  </button>
+
+  <script src="script.js">
+
+
+
+  </script>
+</body>
+</html>

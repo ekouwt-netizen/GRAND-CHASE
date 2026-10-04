@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grand Chase Bank - Online Portal</title>
+    <style>
+        :root {
+            --navy-dark: #0A192F;
+            --navy-card: #112240;
+            --gold-primary: #D4AF37;
+            --gold-hover: #B89528;
+            --bg-page: #F8FAFC;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --white: #FFFFFF;
+            --border-color: #CBD5E1;
+            --green: #10B981;
+            --red: #EF4444;
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Header */
+        header {
+            background-color: var(--navy-dark);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gold-primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--gold-primary);
+            color: var(--navy-dark);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Navigation Bar */
+        nav.nav-tabs {
+            background: var(--navy-card);
+            display: flex;
+            padding: 0 2rem;
+            gap: 1rem;
+            overflow-x: auto;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 1rem 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .nav-btn.active {
+            color: var(--gold-primary);
+            border-bottom-color: var(--gold-primary);
+        }
+
+        /* Main App Container */
+        .container {
+            max-width: 1080px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* Card Panels */
+        .card-panel {
+            background: var(--white);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Forms & Inputs */
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--navy-dark);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 0.85rem;
+            background-color: var(--navy-dark);
+            color: var(--gold-primary);
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--navy-card);
+        }
+
+        /* Visual Debit Card */
+        .visual-card {
+            width: 100%;
+            height: 200px;
+            border-radius: 16px;
+            padding: 1.5rem;
+            color: white;
+            background: linear-gradient(135deg, #0A192F 0%, #1E3A8A 100%);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-num {
+            font-family: monospace;
+            font-size: 1.25rem;
+            letter-spacing: 2px;
+        }
+
+        /* Range Slider */
+        .range-slider {
+            width: 100%;
+            margin-top: 0.4rem;
+        }
+
+        /* Table */
+        .tx-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+            text-align: left;
+        }
+
+        .tx-table th, .tx-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .val-plus { color: var(--green); font-weight: 700; }
+        .val-minus { color: var(--red); font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="brand">Grand Chase Bank</div>
+        <div class="user-info">
+            <div class="avatar">JD</div>
+            <span>John Doe</span>
+        </div>
+    </header>
+
+    <!-- Sub-navigation Tabs -->
+    <nav class="nav-tabs">
+        <button type="button" class="nav-btn active" data-tab="tab-transfers">Transfers</button>
+        <button type="button" class="nav-btn" data-tab="tab-cards">Cards & Virtual</button>
+        <button type="button" class="nav-btn" data-tab="tab-loans">Loans & Credit</button>
+        <button type="button" class="nav-btn" data-tab="tab-analytics">Analytics</button>
+    </nav>
+
+    <div class="container">
+
+        <!-- 1. TRANSFERS SECTION -->
+        <div id="tab-transfers" class="tab-panel active">
+            <div class="grid-2">
+                <div class="card-panel">
+                    <h3>Send Money</h3>
+                    <form id="form-send" style="margin-top: 1rem;">
+                        <div class="form-group">
+                            <label for="recipient">Recipient Account / Email</label>
+                            <input type="text" id="recipient" class="form-control" placeholder="user@domain.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="send-amount">Amount ($)</label>
+                            <input type="number" id="send-amount" class="form-control" placeholder="0.00" min="1" step="0.01" required>
+                        </div>
+                        <button type="submit" class="btn-submit">Execute Transfer</button>
+                    </form>
+                </div>
+
+                <div class="card-panel">
+                    <h3>Account Summary</h3>
+                    <div style="margin-top: 1rem;">
+                        <p style="color: var(--text-muted); font-size: 0.85rem;">Available Balance</p>
+                        <h2 style="font-size: 2rem; color: var(--navy-dark);">$24,850.00</h2>
+                        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Checking Account •••• 1042</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. CARDS SECTION -->
+        <div id="tab-cards" class="tab-panel">
+            <div class="grid-2">
+                <div class="card-panel">
+                    <h3>Active Card</h3>
+                    <div class="visual-card" style="margin-top: 1rem;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>GRAND CHASE</span>
+                            <span style="color: var(--gold-primary); font-weight: 700;">PREMIER</span>
+                        </div>
+                        <div class="card-num" id="card-num-text">•••• •••• •••• 4012</div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                            <span>JOHN DOE</span>
+                            <span>10/28</span>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-submit" id="toggle-card-num" style="margin-top: 1rem;">Toggle Card Details</button>
+                </div>
+
+                <div class="card-panel">
+                    <h3>Card Settings</h3>
+                    <div style="margin-top: 1rem;">
+                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <span>Freeze Card</span>
+                            <input type="checkbox" id="freeze-card-check">
+                        </label>
+                        <label style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>Online Transactions</span>
+                            <input type="checkbox" checked>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. LOANS SECTION -->
+        <div id="tab-loans" class="tab-panel">
+            <div class="card-panel">
+                <h3>Loan Payment Calculator</h3>
+                <div class="grid-2" style="margin-top: 1rem;">
+                    <div>
+                        <div class="form-group">
+                            <label for="loan-amount">Loan Amount: <strong id="amount-label">$10,000</strong></label>
+                            <input type="range" id="loan-amount" class="range-slider" min="1000" max="50000" step="1000" value="10000">
+                        </div>
+                        <div class="form-group">
+                            <label for="loan-term">Term Months: <strong id="term-label">24 Months</strong></label>
+                            <input type="range" id="loan-term" class="range-slider" min="12" max="60" step="12" value="24">
+                        </div>
+                    </div>
+                    <div style="background: #F1F5F9; padding: 1.25rem; border-radius: 8px;">
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">Estimated Monthly Repayment</p>
+                        <h2 id="calc-monthly" style="font-size: 2rem; color: var(--navy-dark); margin: 0.5rem 0;">$443.21</h2>
+                        <button type="button" class="btn-submit" id="loan-apply-btn">Apply Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. ANALYTICS SECTION -->
+        <div id="tab-analytics" class="tab-panel">
+            <div class="card-panel">
+                <h3>Recent Statements</h3>
+                <div style="margin-top: 1rem; overflow-x: auto;">
+                    <table class="tx-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Merchant / Detail</th>
+                                <th>Category</th>
+                                <th style="text-align: right;">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Oct 04, 2026</td>
+                                <td>Direct Deposit - Employer</td>
+                                <td>Income</td>
+                                <td style="text-align: right;" class="val-plus">+$3,500.00</td>
+                            </tr>
+                            <tr>
+                                <td>Oct 03, 2026</td>
+                                <td>Grocery Market</td>
+                                <td>Food</td>
+                                <td style="text-align: right;" class="val-minus">-$124.50</td>
+                            </tr>
+                            <tr>
+                                <td>Oct 01, 2026</td>
+                                <td>Electric Utility Co</td>
+                                <td>Bills</td>
+                                <td style="text-align: right;" class="val-minus">-$85.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Isolated JavaScript Execution Block -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // 1. Navigation Tabs Logic
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const tabPanels = document.querySelectorAll('.tab-panel');
+
+            navButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-tab');
+
+                    navButtons.forEach(b => b.classList.remove('active'));
+                    tabPanels.forEach(p => p.classList.remove('active'));
+
+                    this.classList.add('active');
+                    const targetPanel = document.getElementById(targetId);
+                    if (targetPanel) {
+                        targetPanel.classList.add('active');
+                    }
+                });
+            });
+
+            // 2. Card Details Toggle Logic
+            const toggleCardBtn = document.getElementById('toggle-card-num');
+            const cardNumText = document.getElementById('card-num-text');
+            let isMasked = true;
+
+            if (toggleCardBtn && cardNumText) {
+                toggleCardBtn.addEventListener('click', function() {
+                    isMasked = !isMasked;
+                    cardNumText.textContent = isMasked ? '•••• •••• •••• 4012' : '4532 8810 9921 4012';
+                });
+            }
+
+            // 3. Loan Calculation Logic
+            const amountRange = document.getElementById('loan-amount');
+            const termRange = document.getElementById('loan-term');
+            const amountLabel = document.getElementById('amount-label');
+            const termLabel = document.getElementById('term-label');
+            const calcMonthly = document.getElementById('calc-monthly');
+
+            function updateLoanCalc() {
+                if (!amountRange || !termRange) return;
+
+                const principal = parseFloat(amountRange.value);
+                const months = parseInt(termRange.value);
+                const annualRate = 0.0599; // 5.99%
+
+                amountLabel.textContent = '$' + principal.toLocaleString();
+                termLabel.textContent = months + ' Months';
+
+                const monthlyRate = annualRate / 12;
+                const payment = (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+
+                calcMonthly.textContent = '$' + payment.toFixed(2);
+            }
+
+            if (amountRange && termRange) {
+                amountRange.addEventListener('input', updateLoanCalc);
+                termRange.addEventListener('input', updateLoanCalc);
+                updateLoanCalc();
+            }
+
+            // 4. Form Submission Safety Handlers
+            const sendForm = document.getElementById('form-send');
+            if (sendForm) {
+                sendForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Transaction successfully processed.');
+                    sendForm.reset();
+                });
+            }
+
+            const loanApplyBtn = document.getElementById('loan-apply-btn');
+            if (loanApplyBtn) {
+                loanApplyBtn.addEventListener('click', function() {
+                    alert('Loan pre-approval application submitted successfully.');
+                });
+            }
+
+        });
+    </script>
+</body>
+</html>

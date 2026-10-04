@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Account Settings - Grand Chase Bank</title>
+  <link rel="stylesheet" href="le.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-logo">GC</div>
+        <span class="brand-title">Grand Chase <strong>Bank</strong></span>
+      </div>
+      <div class="user-badge">
+        <span class="avatar">AM</span>
+        <span class="user-name">Alex Morgan</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <div class="page-title-section">
+    <div class="container">
+      <h1>Account Settings</h1>
+      <p>Manage your profile, security, notifications, and banking limits.</p>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <main class="container main-content">
+    
+    <!-- Sidebar / Settings Tabs Navigation -->
+    <aside class="settings-sidebar">
+      <nav class="settings-nav">
+       <a href="#"><button class="nav-tab active" data-tab="profile">
+          <span class="tab-icon">👤</span> Personal Details
+        </button></a> 
+        <a href="login.html"><button class="nav-tab active" data-tab="security">
+          <span class="tab-icon">🔒</span> Logout
+        </button></a>
+        <a href="dashboard1.html" class="but"><button class="nav-tab" data-tab="preferences">
+          <span class="tab-icon">⚙️</span> Main Dashboard
+        </button></a>
+        <a href="cards.html"class="but" ><button class="nav-tab" data-tab="limits">
+          <span class="tab-icon">💳</span> Account Limits & Cards
+        </button></a>
+      </nav>
+
+      <div class="security-banner card">
+        <div class="banner-header">
+          <span class="status-shield">🛡️</span>
+          <strong>Account Protected</strong>
+        </div>
+        <p class="text-muted">256-Bit Banking Encryption & Biometric Auth enabled.</p>
+      </div>
+    </aside>
+
+    <!-- Tab Panels Container -->
+    <section class="settings-panels">
+
+      <!-- Toast Notification Alert -->
+      <div id="toast" class="toast hidden">Settings updated successfully!</div>
+
+      <!-- 1. PERSONAL DETAILS TAB -->
+      <div class="panel active" id="panel-profile">
+        <div class="card">
+          <div class="card-header">
+            <h2>Personal Profile</h2>
+            <p class="text-muted">Update your legal contact details and personal information.</p>
+          </div>
+
+          <form id="form-profile" onsubmit="handleSave(event, 'Personal Profile')">
+            <div class="avatar-upload-row">
+              <div class="avatar-preview">AM</div>
+              <div>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="alert('Photo upload dialog opened.')">Change Avatar</button>
+                <p class="text-xs text-muted">JPG or PNG. Max size 2MB.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="fname">First Name</label>
+                <input type="text" id="fname" value="Alex" required>
+              </div>
+              <div class="form-group">
+                <label for="lname">Last Name</label>
+                <input type="text" id="lname" value="Morgan" required>
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" value="ekouwt@gmail.com" required>
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" value="+233 59 732 8895" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="address">Residential Address</label>
+              <input type="text" id="address" value="45 Grand Avenue, Financial District, Accra">
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- 2. SECURITY & LOGIN TAB -->
+      <div class="panel" id="panel-security">
+        <div class="card">
+          <div class="card-header">
+            <h2>Security & Authentication</h2>
+            <p class="text-muted">Manage password, Two-Factor Authentication (2FA), and biometric access.</p>
+          </div>
+
+          <!-- Password Change Form -->
+          <form id="form-password" onsubmit="handlePasswordChange(event)">
+            <h3>Change Password</h3>
+            <div class="form-group">
+              <label for="curr-pass">Current Password</label>
+              <input type="password" id="curr-pass" required placeholder="••••••••">
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="new-pass">New Password</label>
+                <input type="password" id="new-pass" required placeholder="Min 8 characters">
+              </div>
+              <div class="form-group">
+                <label for="confirm-pass">Confirm New Password</label>
+                <input type="password" id="confirm-pass" required placeholder="Confirm new password">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">Update Password</button>
+          </form>
+
+          <hr class="divider">
+
+          <!-- Security Switches -->
+          <div class="toggle-list">
+            <div class="toggle-item">
+              <div>
+                <strong>Two-Factor Authentication (2FA)</strong>
+                <p class="text-muted">Receive SMS/OTP verification code for every transfer.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="toggle-2fa" checked onchange="toggleSetting('2FA Authentication', this.checked)">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="toggle-item">
+              <div>
+                <strong>Biometric Login</strong>
+                <p class="text-muted">Use Fingerprint or Face ID on mobile banking app.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="toggle-bio" checked onchange="toggleSetting('Biometric Authentication', this.checked)">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. PREFERENCES & ALERTS TAB -->
+      <div class="panel" id="panel-preferences">
+        <div class="card">
+          <div class="card-header">
+            <h2>Preferences & Alerts</h2>
+            <p class="text-muted">Customize how you receive account alerts and balance notifications.</p>
+          </div>
+
+          <div class="toggle-list">
+            <div class="toggle-item">
+              <div>
+                <strong>Transaction SMS Alerts</strong>
+                <p class="text-muted">Get real-time text alerts for all transactions above $50.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked onchange="toggleSetting('SMS Alerts', this.checked)">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="toggle-item">
+              <div>
+                <strong>Email Statements & Summaries</strong>
+                <p class="text-muted">Receive weekly and monthly balance statements to ekouwt@gmail.com.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked onchange="toggleSetting('Email Statements', this.checked)">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="toggle-item">
+              <div>
+                <strong>Marketing & Promotional Updates</strong>
+                <p class="text-muted">Offers on loans, savings rates, and investment accounts.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" onchange="toggleSetting('Marketing Emails', this.checked)">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. ACCOUNT LIMITS & CARDS TAB -->
+      <div class="panel" id="panel-limits">
+        <div class="card">
+          <div class="card-header">
+            <h2>Transfer Limits & Debit Card Settings</h2>
+            <p class="text-muted">Control spending limits and manage physical and virtual cards.</p>
+          </div>
+
+          <form onsubmit="handleSave(event, 'Transfer Limits')">
+            <div class="form-group">
+              <label for="limit-range">Daily Wire Transfer Limit: <strong id="limit-value">$10,000</strong></label>
+              <input type="range" id="limit-range" min="1000" max="50000" step="1000" value="10000" oninput="updateLimitText(this.value)">
+              <p class="text-xs text-muted">Maximum allowable transfer amount without manager pre-approval.</p>
+            </div>
+
+            <hr class="divider">
+
+            <h3>Active Payment Cards</h3>
+            <div class="card-list">
+              <div class="bank-card-item">
+                <div class="card-info">
+                  <strong>Debit Mastercard</strong>
+                  <p class="text-muted">•••• •••• •••• 4291 | Exp: 08/28</p>
+                </div>
+                <div class="card-actions">
+                  <span class="badge badge-success">Active</span>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="alert('Card freeze toggled.')">Freeze Card</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions" style="margin-top: 1.5rem;">
+              <button type="submit" class="btn btn-primary">Save Preferences</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script src="script.js">
+
+
+
+
+
+  </script>
+</body>
+</html>
